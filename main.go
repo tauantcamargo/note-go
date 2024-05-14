@@ -7,10 +7,14 @@ import (
 )
 
 func main() {
-    title, content, error := note.GetNoteData()
+    title, content := note.GetNoteData()
+
+    userNote, error := note.New(title, content)
 
     if error != nil {
         fmt.Println(error)
         return
     }
+
+    fmt.Println("Note created successfully")
 }
