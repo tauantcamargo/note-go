@@ -14,12 +14,8 @@ type Note struct {
 }
 
 func New(title, content string) (*Note, error) {
-    if title == "" {
-        return nil, errors.New("error: Title cannot be empty")
-    }
-
-    if content == "" {
-        return nil, errors.New("error: Content cannot be empty")
+    if title == "" || content == "" {
+        return nil, errors.New("error: Invalid input, input cannot be empty")
     }
 
     return &Note{
@@ -29,18 +25,10 @@ func New(title, content string) (*Note, error) {
     }, nil
 }
 
-func GetNoteData() (string, string, error) {
-    title, error := user.GetUserInput("Enter note title: ")
+func GetNoteData() (string, string) {
+    title := user.GetUserInput("Enter note title: ")
     
-    if error != nil {
-        return "", "", error
-    }
-    
-    content, error := user.GetUserInput("Enter note content: ")
+    content := user.GetUserInput("Enter note content: ")
 
-    if error != nil {
-        return "", "", error
-    }
-
-    return title, content, nil
+    return title, content
 }
