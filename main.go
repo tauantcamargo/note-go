@@ -16,5 +16,5 @@ func main() {
         return
     }
 
-    fmt.Println("Note created successfully")
+    userNote.Display()
 }
