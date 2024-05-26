@@ -11,6 +11,16 @@ type saver interface {
     Save() error
 }
 
+type outputtable interface {
+    saver
+    Display()
+}
+
+func outputData(data outputtable) error {
+    data.Display()
+    return saveData(data)
+}
+
 func saveData(data saver) error {
     err := data.Save()
 
@@ -23,31 +33,50 @@ func saveData(data saver) error {
     return nil
 }
 
+func doSomething(value any) {
+    switch v := value.(type) {
+    case int: 
+        fmt.Println("This is an integer:", v)
+    case string:
+        fmt.Println("This is a string:", v)
+    case float64:
+        fmt.Println("This is a base64 encoded string:", v)
+    default:
+        fmt.Println("Unknown type")
+    }
+}
+
 func main() {
     title, content := note.GetNoteData()
 
-    userNote, error := note.New(title, content)
+    userNote, err := note.New(title, content)
 
-    if error != nil {
-        fmt.Println(error)
+    if err != nil {
+        fmt.Println(err)
         return
     }
 
     userContent := todo.GetTodoData()
 
-    userTodo, error := todo.New(userContent)
+    userTodo, err := todo.New(userContent)
 
-    if error != nil {
-        fmt.Println(error)
+    if err != nil {
+        fmt.Println(err)
         return
     }
 
-    userNote.Display()
-    saveData(userNote)
+    err = outputData(userNote)
 
-    userTodo.Display()
-    saveData(userTodo)
-    
+    if err != nil {
+        return
+    }
+
+    err = outputData(userTodo)
+
+    if err != nil {
+        return
+    }
+
     fmt.Println("The note was saved successfully.")
     fmt.Println("The todo was saved successfully.")
 }
